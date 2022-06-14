@@ -1,0 +1,14 @@
+{
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.linting.pylintPath": "pylint",
+    "python.linting.pylintArgs": [
+        "--disable=C0111" // error code
+    ],
+    "python.autoComplete.extraPaths": [
+        "${workspaceFolder}/__pypackages__/3.10/lib"
+    ],
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/__pypackages__/3.10/lib"
+    ]
+}

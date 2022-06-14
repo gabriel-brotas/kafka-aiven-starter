@@ -1,0 +1,100 @@
+version: "3"
+
+services:
+  app:
+    build: .
+    container_name: kafka-app
+    volumes:
+      - .:/home/python/app
+    ports:
+      - 3000:3000
+
+  # zookeeper:
+  #   image: confluentinc/cp-zookeeper:latest
+  #   environment:
+  #     ZOOKEEPER_CLIENT_PORT: 2181
+  #   extra_hosts:
+  #     - "host.docker.internal:172.17.0.1"
+
+  # kafka:
+  #   image: confluentinc/cp-kafka:latest
+  #   depends_on:
+  #     - zookeeper
+  #   ports:
+  #     - "9092:9092"
+  #     - "9094:9094"
+  #   environment:
+  #     KAFKA_BROKER_ID: 1
+  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  #     KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+  #     KAFKA_LISTENERS: INTERNAL://:9092,OUTSIDE://:9094
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+  #     KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,OUTSIDE://host.docker.internal:9094
+
+  #     # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9092
+  #     KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://karapace-registry:8081
+  #   extra_hosts:
+  #     - "host.docker.internal:172.17.0.1"
+
+  # control-center:
+  #   image: confluentinc/cp-enterprise-control-center:6.0.1
+  #   hostname: control-center
+  #   depends_on:
+  #     - kafka
+  #   ports:
+  #     - "9021:9021"
+  #   environment:
+  #     CONTROL_CENTER_BOOTSTRAP_SERVERS: 'kafka:9092'
+  #     CONTROL_CENTER_REPLICATION_FACTOR: 1
+  #     CONTROL_CENTER_CONNECT_CLUSTER: http://app-connect:8083
+  #     PORT: 9021
+  #   extra_hosts:
+  #     - "host.docker.internal:172.17.0.1"
+    
+  # karapace-registry:
+  #   image: ghcr.io/aiven/karapace:develop
+  #   entrypoint:
+  #     - /bin/bash
+  #     - /opt/karapace/start.sh
+  #     - registry
+  #   depends_on:
+  #     - kafka
+  #   ports:
+  #     - "8081:8081"
+  #   environment:
+  #     KARAPACE_ADVERTISED_HOSTNAME: karapace-registry
+  #     KARAPACE_BOOTSTRAP_URI: kafka:9092
+  #     KARAPACE_PORT: 8081
+  #     KARAPACE_HOST: 0.0.0.0
+  #     KARAPACE_CLIENT_ID: karapace
+  #     KARAPACE_GROUP_ID: karapace-registry
+  #     KARAPACE_MASTER_ELIGIBILITY: "true"
+  #     KARAPACE_TOPIC_NAME: _schemas
+  #     KARAPACE_LOG_LEVEL: WARNING
+  #     KARAPACE_COMPATIBILITY: FULL
+  #   extra_hosts:
+  #     - "host.docker.internal:172.17.0.1"
+
+  # karapace-rest:
+  #   image: ghcr.io/aiven/karapace:develop
+  #   entrypoint:
+  #     - /bin/bash
+  #     - /opt/karapace/start.sh
+  #     - rest
+  #   depends_on:
+  #     - kafka
+  #     - karapace-registry
+  #   ports:
+  #     - "8082:8082"
+  #   environment:
+  #     KARAPACE_PORT: 8082
+  #     KARAPACE_HOST: 0.0.0.0
+  #     KARAPACE_ADVERTISED_HOSTNAME: karapace-rest
+  #     KARAPACE_BOOTSTRAP_URI: kafka:9092
+  #     KARAPACE_REGISTRY_HOST: karapace-registry
+  #     KARAPACE_REGISTRY_PORT: 8081
+  #     KARAPACE_ADMIN_METADATA_MAX_AGE: 0
+  #     KARAPACE_LOG_LEVEL: WARNING
+  #   extra_hosts:
+  #     - "host.docker.internal:172.17.0.1"
