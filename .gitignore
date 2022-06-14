@@ -2,3 +2,5 @@ ca.pem
 key.pem
 secret.pem
 .env
+__pypackages__/
+__pypackages__/*
