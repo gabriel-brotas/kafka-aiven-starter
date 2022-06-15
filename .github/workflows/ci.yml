@@ -1,0 +1,34 @@
+name: Commitlint
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  commit-message:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    
+    - name: Setup Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14.x
+
+    - name: Initializate Node
+      run: npm init -y
+
+    - name: Setup Environment
+      run: |
+        npm install @commitlint/cli @commitlint/config-conventional husky
+        npx husky install
+        rm -rf .husky/*
+        echo '#!/bin/sh \n. "$(dirname "$0")/_/husky.sh" \nnpx --no -- commitlint --edit "${1}"' > .husky/commit-msg
+        echo "module.exports = {extends: ['@commitlint/config-conventional']}" > commitlint.config.js
+        chmod a+x .husky/commit-msg
+        
+    - name: Validate all commits from PR
+      run: git log -1 --pretty=format:"%s" | npx commitlint

@@ -31,6 +31,7 @@ docker-compose up -d
     3.1 - Enable the "kafka_authentication_methods.sasl" option;
     3.2 - Enable the "Apache Kafka REST API (Karapace)" and "Schema Registry (Karapace)" option;
     3.3 - Create the topic "transactions";
+    3.4 - Download the ca from your service and save on this project directory;
     3.3 - Access the container and run the following commands:
 ```bash
     # access the container
@@ -129,3 +130,21 @@ docker-compose up -d
 
     # you should be able to read the messages
 ```  
+
+## Terraform
+```bash
+    cd infraestructure 
+    
+    terraform init 
+        
+    terraform validate -no-color
+        
+    terraform plan -var-file=./dev.tfvars
+        
+    terraform apply -auto-approve -var-file=./dev.tfvars
+```
+
+Clean up
+```bash
+    terraform destroy -var-file=./dev.tfvars
+```
