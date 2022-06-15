@@ -6,6 +6,20 @@
 - Docker/Docker Compose
 
 ## How to use
+1 - Setup aiven cluster using terraform
+```bash
+    cd infraestructure 
+    
+    terraform init 
+
+    export TF_VAR_aiven_api_token=<your aiven api token>
+
+    terraform validate -no-color
+        
+    terraform plan -var-file=./dev.tfvars
+        
+    terraform apply -auto-approve -var-file=./dev.tfvars
+```
 1 - create your cluster on aiven or confluent and add the environment variables on a .env file with the following template
 ```
     CONFLUENT_BOOTSTRAP_SERVER=
@@ -129,20 +143,8 @@ docker-compose up -d
     # you should be able to read the messages
 ```  
 
-## Terraform
-```bash
-    cd infraestructure 
-    
-    terraform init 
-        
-    terraform validate -no-color
-        
-    terraform plan -var-file=./dev.tfvars
-        
-    terraform apply -auto-approve -var-file=./dev.tfvars
-```
 
-Clean up
+## Clean up
 ```bash
     terraform destroy -var-file=./dev.tfvars
 ```
