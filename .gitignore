@@ -4,3 +4,8 @@ secret.pem
 .env
 __pypackages__/
 __pypackages__/*
+
+.terraform
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
