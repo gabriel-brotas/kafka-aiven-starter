@@ -27,7 +27,6 @@ docker-compose up -d
 
 3 - Aiven
 
-    3.0 - Create the cluster;
     3.1 - Enable the "kafka_authentication_methods.sasl" option;
     3.2 - Enable the "Apache Kafka REST API (Karapace)" and "Schema Registry (Karapace)" option;
     3.3 - Create the topic "transactions";
@@ -88,7 +87,6 @@ docker-compose up -d
 
 4 - Confluent
 
-    4.0 - Create the cluster;
     4.1 - Create a "transactions" topic;
     4.2 - Access the container and run the following commands;
 ```bash

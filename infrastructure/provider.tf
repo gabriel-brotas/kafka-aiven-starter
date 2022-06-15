@@ -45,12 +45,19 @@ resource "aiven_kafka" "kafka-cluster" {
 }
 
 resource "aiven_service_user" "myserviceuser" {
+  depends_on = [
+    aiven_kafka.kafka-cluster
+  ]
   project      = aiven_kafka.kafka-cluster.project
   service_name = aiven_kafka.kafka-cluster.service_name
   username     = "dev.sa.gabriel"
 }
 
 resource "aiven_kafka_acl" "mytestacl" {
+  depends_on = [
+    aiven_kafka.kafka-cluster
+  ]
+
   project      = aiven_kafka.kafka-cluster.project
   service_name = aiven_kafka.kafka-cluster.service_name
   topic        = "dev.*"
@@ -58,10 +65,14 @@ resource "aiven_kafka_acl" "mytestacl" {
   username     = "dev"
 }
 
-resource "aiven_kafka_topic" "mytesttopic" {
+resource "aiven_kafka_topic" "transactions_topic" {
+  depends_on = [
+    aiven_kafka.kafka-cluster
+  ]
+
   project      = aiven_kafka.kafka-cluster.project
   service_name = aiven_kafka.kafka-cluster.service_name
-  topic_name             = "dev.marketing"
+  topic_name             = "transactions"
   partitions             = 3
   replication            = 3
   termination_protection = true
@@ -79,7 +90,37 @@ resource "aiven_kafka_topic" "mytesttopic" {
   }
 }
 
-resource "aiven_kafka_schema" "kafka-schema1" {
+resource "aiven_kafka_topic" "orders_topic" {
+  depends_on = [
+    aiven_kafka.kafka-cluster
+  ]
+
+  project      = aiven_kafka.kafka-cluster.project
+  service_name = aiven_kafka.kafka-cluster.service_name
+  topic_name             = "orders"
+  partitions             = 3
+  replication            = 3
+  termination_protection = true
+
+  config {
+    flush_ms                       = 10
+    unclean_leader_election_enable = true
+    cleanup_policy                 = "compact,delete"
+  }
+
+
+  timeouts {
+    create = "1m"
+    read   = "5m"
+  }
+}
+
+
+resource "aiven_kafka_schema" "order_schema" {
+  depends_on = [
+    aiven_kafka.kafka-cluster
+  ]
+  
   project      = aiven_kafka.kafka-cluster.project
   service_name = aiven_kafka.kafka-cluster.service_name
   subject_name        = "kafka-schema1"
