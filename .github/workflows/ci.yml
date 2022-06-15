@@ -26,6 +26,7 @@ jobs:
         npm install @commitlint/cli @commitlint/config-conventional husky
         npx husky install
         rm -rf .husky/*
+        touch .husky/commig-msg
         echo '#!/bin/sh \n. "$(dirname "$0")/_/husky.sh" \nnpx --no -- commitlint --edit "${1}"' > .husky/commit-msg
         echo "module.exports = {extends: ['@commitlint/config-conventional']}" > commitlint.config.js
         chmod a+x .husky/commit-msg
